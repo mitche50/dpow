@@ -1,0 +1,75 @@
+.powtooltip {
+    position: relative;
+    display: inline-block;
+    float:right;
+    color:grey;
+    font-size:75%;
+}
+
+.powtooltip .powtooltiptext {
+    visibility: hidden;
+    width: 200px;
+    padding: 15px;
+    background-color: black;
+    color: white;
+    opacity: .8;
+    margin-right: 5px;
+    text-align: center;
+    border-radius: 4px;
+    position: absolute;
+
+    /* Position the tooltip */
+    top: -5px;
+    right: 105%;
+}
+
+.powtooltip:hover .powtooltiptext {
+    visibility: visible;
+    z-index: 999;
+}
+
+#loadMoreServices:hover{ cursor:pointer}
+
+#loadMoreClients:hover{ cursor:pointer}
+
+.avgPowButton {
+  font-size: 12px;
+  outline: #4691E3;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 5px 10px;
+  margin: 2px;
+  border-radius: 10px;
+  display: inline-block;
+  color: grey;
+  background-color: white;
+}
+
+.avgPowButton:hover {
+  box-shadow: 2px 5px 10px -5px #4691E3;
+}
+
+.avgPowButtonActive {
+  font-size: 12px;
+  outline: #4691E3;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 5px 10px;
+  margin: 2px;
+  border-radius: 10px;
+  display: inline-block;
+  color: grey;
+  background-color: #4691E3;
+  color: white;
+  opacity: .8;
+}

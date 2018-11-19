@@ -1,0 +1,449 @@
+{% extends "layout.html" %}
+{% block content %}
+<body>
+<br><br>
+<div class="container">
+<h2>Overview</h2>
+<div class="card-deck mb-3 text-center">
+  <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <div style="display:inline-block">
+            <p class="card-text">Clients Connected</p>
+        </div>
+        <div class="powtooltip">
+            <i class="far fa-question-circle"></i>
+            <span class="powtooltiptext">Total number of clients connected to the network providing work.</span>
+        </div>
+        <div><br></div>
+        <div style="display:inline-block">
+            <h1 class="text-left">{{client_count}}</h1>
+        </div>
+            <div style="display:inline-block; vertical-align:top">
+                {% if clients_24hr < 0 %}
+                  <p style="color:#E24A4A; font-size:10px; display:inline;">{{clients_24hr}}</p>
+                {% elif clients_24hr == 0 %}
+                  <p style="color:grey; font-size:10px; display:inline;">{{clients_24hr}}</p>
+                {% else %}
+                  <p style="color:#32CD32; font-size:10px; display:inline;">+{{clients_24hr}}</p>
+                {% endif %}
+            </div>
+          <div style="display:inline-block">
+          <p style="font-size: x-small; color:grey; text-align:right; padding-left: 20px">{{client_precache_ratio}}% precache<br>
+          {{client_urgent_ratio}}% on demand<br>
+          {{client_both_ratio}}% both</p>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+        <div style="display:inline-block">
+            <p class="card-text">Registered Services</p>
+        </div>
+        <div class="powtooltip">
+            <i class="far fa-question-circle"></i>
+            <span class="powtooltiptext">Total number of services utilizing the dPoW network.</span>
+        </div>
+        <div><br></div>
+          <div style="display:inline-block">
+            <h1 class="text-left">{{service_count}}</h1>
+          </div>
+        <div style="display:inline-block; vertical-align:top">
+            {% if services_24hr < 0 %}
+              <p style="color:#E24A4A; font-size:10px; display:inline;">{{services_24hr}}</p>
+            {% elif services_24hr == 0 %}
+              <p style="color:grey; font-size:10px; display:inline;">{{services_24hr}}</p>
+            {% else %}
+              <p style="color:#32CD32; font-size:10px; display:inline;">+{{services_24hr}}</p>
+            {% endif %}
+        </div>
+          <div style="display:inline-block">
+              <p style="font-size: x-small; color:grey; text-align:right; padding-left: 20px">{{listed_services}} listed</p>
+          </div>
+        </div>
+    </div>
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+        <div style="display:inline-block">
+            <p class="card-text">Requests</p>
+        </div>
+        <div class="powtooltip">
+            <i class="far fa-question-circle"></i>
+            <span class="powtooltiptext">Total number of work requests processed by the dPoW network.</span>
+        </div>
+        <div><br></div>
+          <div style="display:inline-block">
+            <h1 class="text-left">{{pow_count}}</h1>
+          </div>
+            <div style="display:inline-block; vertical-align:top">
+                {% if work_24hr < 0 %}
+                  <p style="color:#E24A4A; font-size:10px; display:inline;">{{work_24hr}}</p>
+                {% elif work_24hr == 0 %}
+                  <p style="color:grey; font-size:10px; display:inline;">{{work_24hr}}</p>
+                {% else %}
+                  <p style="color:#32CD32; font-size:10px; display:inline;">+{{work_24hr}}</p>
+                {% endif %}
+            </div>
+          <div style="display:inline-block">
+            <p style="font-size: x-small; color:grey; text-align:right; padding-left: 20px">{{precache_ratio}}% precached</p>
+          </div>
+          </div>
+        </div>
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <div style="display:inline-block">
+                <p class="card-text">Average Difficulty</p>
+            </div>
+            <div class="powtooltip">
+                <i class="far fa-question-circle"></i>
+                <span class="powtooltiptext">Average work difficulty as a factor of the base difficulty of Nano.  The higher the factor, the more computational power it takes to solve the PoW.</span>
+            </div>
+            <div><br></div>
+            <div style="display:inline-block; float:left;">
+                <h1 style="display:inline;">
+                    {% if avg_difficulty %}
+                        {{avg_difficulty}}
+                    {% else %}
+                        1.0
+                    {% endif %}
+                </h1><p style="display:inline;">x</p>
+            </div>
+            <!--<div style="display:inline-block; vertical-align:top">
+                {% if work_24hr < 0 %}
+                  <p style="color:#E24A4A; font-size:10px; display:inline;">{{work_24hr}}</p>
+                {% elif work_24hr == 0 %}
+                  <p style="color:grey; font-size:10px; display:inline;">{{work_24hr}}</p>
+                {% else %}
+                  <p style="color:#32CD32; font-size:10px; display:inline;">+{{work_24hr}}</p>
+                {% endif %}
+            </div>-->
+        </div>
+    </div>
+    </div>
+
+<div class="card-deck mb-3 text-center">
+  <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <div class="d-flex justify-content-between w-100">
+          <p class="card-text text-left">Average Requests</p>
+          <div class="powtooltip">
+            <i class="far fa-question-circle"></i>
+            <span class="powtooltiptext">Average number of work requests processed by the DPoW network.</span>
+          </div>
+        </div>
+          <div class="row">
+              <div class="col" style="float:left">
+                <h1 class="text-left">{{requests_avg}}</h1>
+              </div>
+              <div class="col" style="float:right">
+                <div>
+                    <span class="avgPowButton" id="avgDay">Day</span>
+                    <span class="avgPowButtonActive" id="avgHour">Hour</span>
+                    <span class="avgPowButton" id="avgMin">Minute</span>
+                </div>
+              </div>
+            </div>
+        <canvas id="powPerMinute" width="400" height="200"></canvas>
+      </div>
+    </div>
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <div class="d-flex justify-content-between w-100">
+          <p class="card-text text-left">Average Time</p>
+          <div class="powtooltip">
+            <i class="far fa-question-circle"></i>
+            <span class="powtooltiptext">Average Time it takes to process a work request on the DPoW network.</span>
+          </div>
+        </div>
+        <h1 class="text-left">{{avg_overall}}s</h1>
+        <canvas id="avgPow" width="400" height="200"></canvas>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+        <div class="row-fluid"><h2>Services</h2></div>
+        <div class="row-fluid">
+            <div class="card-deck mb-4 text-center">
+          <div class="card mb-4 shadow-sm">
+              <div class="card-body">
+                <div class="powtooltip" style="padding-bottom:20px;">
+                    <i class="far fa-question-circle"  ></i>
+                    <span class="powtooltiptext">A list of Services utilizing the DPoW Network.  If a website is provided, clicking on the Service name will send you to their home page.</span>
+                </div>
+                <table class="table table-sm table-striped" style="overflow-wrap: break-word; max-width: 100%;">
+                    <thead>
+                      <tr>
+                        <th scope="col" style="text-align:middle;">
+                          Name
+                        </th>
+                        <th scope="col" style="text-align:center;">
+                          Total Requests
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in services_table %}
+                      <tr class="service_tr">
+                        {% if row[1] %}
+                          <td style="text-align: center;"><a href="http://{{row[1]}}"><u>{{row[0]}}</u></a></td>
+                        {% else %}
+                          <td style="text-align: center;">{{row[0]}}</td>
+                        {% endif %}
+                        {% if row[2] %}
+                          <td style="text-align: center;">{{row[2]}}</td>
+                        {% else %}
+                          <td style="text-align: center;">0</td>
+                        {% endif %}
+                      </tr>
+                      {% endfor %}
+                      {% if unlisted_count == 1 %}
+                        <tr>
+                          <td style="text-align: center;">1 Unlisted Service</td>
+                          <td style="text-align: center;">{{unlisted_pow}}</td>
+                        </tr>
+                      {% elif unlisted_count >1 %}
+                        <tr>
+                          <td style="text-align: center;">{{unlisted_count}} Unlisted Services</td>
+                          <td style="text-align: center;">{{unlisted_pow}}</td>
+                        </tr>
+                      {% else %}
+                      {% endif %}
+                    </tbody>
+                </table>
+                <p style="font-size:12px; color:grey; padding-left:15px; text-align:left;" id="loadMoreServices">Load More ...</p>
+              </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        <div class="col">
+        <div class="row-fluid"><h2>Clients</h2></div>
+            <div class="row-fluid">
+                <div class="card-deck mb-4 text-center">
+                <div class="card mb-4 shadow-sm">
+                  <div class="card-body">
+                    <div class="powtooltip" style="padding-bottom:20px;">
+                      <i class="far fa-question-circle"></i>
+                      <span class="powtooltiptext">A ranked list of payout addresses for clients providing work.  Clicking on the address will take you to Nano Crawler to see the payouts provided.</span>
+                    </div>
+                    <table class="table table-sm table-striped" style="overflow-wrap: break-word; max-width: 100%;">
+                        <thead>
+                            <tr>
+                            <th scope="col" style="text-align:center;">
+                                Rank
+                            </th>
+                            <th scope="col" style="text-align:center;">
+                                Payout Address
+                            </th>
+                            <th scope="col" style="text-align:center;">
+                                Total Work Provided
+                            </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in clients_table %}
+                        <tr class="client_tr">
+                            <td style="text-align: center;"><b>{{loop.index}}</b></td>
+                            <td style="text-align: center;"><a href="https://nanocrawler.cc/explorer/account/{{row[0]}}"><u>{{row[0][:7]}}...{{row[0][-7:]}}</u></a></td>
+                            {% if row[2] %}
+                            <td style="text-align: center;">{{row[2]}}</td>
+                            {% else %}
+                            <td style="text-align: center;">0</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <p style="font-size:12px; color:grey; padding-left:15px; text-align:left;" id="loadMoreClients">Load More ...</p>
+                  </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+
+
+    var pow_ctx = document.getElementById("powPerMinute");
+    var avg_ctx = document.getElementById("avgPow");
+
+    var timeFormat = 'YYYY-MM-DD HH:mm'
+    var dayToolTip = 'MMM Do'
+    var hourToolTip = 'MMM Do h a'
+    var minuteToolTip = 'MMM Do h:mm a'
+
+    var hour_data = [{% for row in hour_total %}
+        {x: "{{row[0]}}", y: {{row[1]}}},
+        {% endfor %}];
+    var minute_data = [{% for row in minute_total %}
+        {x: "{{row[0]}}", y: {{row[1]}}},
+        {% endfor %}];
+    var day_data = [{% for row in day_total %}
+        {x: "{{row[0]}}", y: {{row[1]}}},
+        {% endfor %}];
+
+    var hour_precache_table = [{% for row in hour_precache %}
+        {% if row[2] %}
+            {x: "{{row[0]}}", y: {{row[2]}}},
+        {% else %}
+            {x: "{{row[0]}}", y: 0},
+        {% endif %}
+        {% endfor %}];
+    var hour_ondemand_table = [{% for row in hour_ondemand %}
+        {% if row[2] %}
+            {x: "{{row[0]}}", y: {{row[2]}}},
+        {% else %}
+            {x: "{{row[0]}}", y: 0},
+        {% endif %}
+        {% endfor %}];
+
+    var minute_precache_table = [{% for row in minute_precache %}
+        {% if row[2] %}
+            {x: "{{row[0]}}", y: {{row[2]}}},
+        {% else %}
+            {x: "{{row[0]}}", y: 0},
+        {% endif %}
+        {% endfor %}];
+    var minute_ondemand_table = [{% for row in minute_ondemand %}
+        {% if row[2] %}
+            {x: "{{row[0]}}", y: {{row[2]}}},
+        {% else %}
+            {x: "{{row[0]}}", y: 0},
+        {% endif %}
+        {% endfor %}];
+
+    var day_precache_table = [{% for row in day_precache %}
+        {% if row[2] %}
+            {x: "{{row[0]}}", y: {{row[2]}}},
+        {% else %}
+            {x: "{{row[0]}}", y: 0},
+        {% endif %}
+        {% endfor %}];
+    var day_ondemand_table = [{% for row in day_ondemand %}
+        {% if row[2] %}
+            {x: "{{row[0]}}", y: {{row[2]}}},
+        {% else %}
+            {x: "{{row[0]}}", y: 0},
+        {% endif %}
+        {% endfor %}];
+
+    var avg_precache_time = [{% for row in avg_response %}
+        {% if row[1] == 'P' %}
+            {x: "{{row[0]}}", y: {{row[2]}}},
+        {% endif %}
+        {% endfor %}];
+
+    var avg_ondemand_time = [{% for row in avg_response %}
+        {% if row[1] == 'O' %}
+            {x: "{{row[0]}}", y: {{row[2]}}},
+        {% endif %}
+        {% endfor %}];
+
+    var combined_time = [{% for row in avg_combined_time %}
+        {x: "{{row[0]}}", y: {{row[1]}}},
+    {% endfor %}];
+
+    var avg_data = hour_data;
+    var avg_precache_table = hour_precache_table;
+    var avg_ondemand_table = hour_ondemand_table;
+
+    var avgPowChart = new Chart(pow_ctx, {
+        type: 'line',
+        data:{
+        datasets: [{
+            label: 'Total',
+            data: avg_data,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+            },
+            {
+            label: 'Precache',
+            data: avg_precache_table,
+            backgroundColor: 'rgba(193, 66, 66, 0.2)',
+            borderColor: 'rgba(193, 66, 66, 1)',
+            borderWidth: 1
+            },
+            {
+            label: 'On Demand',
+            data: avg_ondemand_table,
+            backgroundColor: 'rgba(63, 191, 63, 0.2)',
+            borderColor: 'rgba(63, 191, 63, 1)',
+            borderWidth: 1
+            }]
+            },
+        options: {
+            tooltips: {
+                intersect: false,
+                mode: 'index'
+            },
+            scales: {
+                xAxes: [{
+                    type:       "time",
+                    distribution: 'linear',
+                    time:       {
+                        format: timeFormat,
+                        tooltipFormat: hourToolTip,
+                    }
+                }],
+                yAxes: [{
+                    stacked: false
+                }]
+            }
+        }
+    });
+    var avgTimeChart = new Chart(avg_ctx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: 'Combined',
+                data: combined_time,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Precached',
+                data: avg_precache_time,
+                backgroundColor: 'rgba(193, 66, 66, 0.2)',
+                borderColor: 'rgba(193, 66, 66, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'On Demand',
+                data: avg_ondemand_time,
+                backgroundColor: 'rgba(63, 191, 63, 0.2)',
+                borderColor: 'rgba(63, 191, 63, 1)',
+                borderWidth: 1
+            }],
+        },
+        options: {
+            tooltips: {
+                intersect: false,
+                mode: 'index'
+            },
+            scales: {
+                xAxes: [{
+                    type:       "time",
+                    distribution: 'linear',
+                    time:       {
+                        format: timeFormat,
+                        tooltipFormat: hourToolTip,
+                    }
+                }],
+                yAxes: [{
+                    stacked: false
+                }]
+            }
+        }
+    });
+</script>
+
+{% endblock %}

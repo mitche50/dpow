@@ -1,0 +1,143 @@
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function() {
+
+  var pagelength = 10;
+  var service_pageIndex = 1;
+  var client_pageIndex = 1;
+  var client_length = $('.client_tr').length
+  var service_length = $('.service_tr').length
+
+  if(client_length < pagelength){
+    $('#loadMoreClients').hide()
+  }
+
+  if(service_length < pagelength){
+    $('#loadMoreServices').hide()
+  }
+
+  //hide all tr greater than page length
+  $('.service_tr').slice(pagelength).hide();
+  $('.client_tr').slice(pagelength).hide();
+
+  $("#loadMoreServices").click(function(){
+  	var itemsCount = ((service_pageIndex * pagelength) + pagelength);
+  	$('.service_tr').slice(0, itemsCount).show();
+    service_pageIndex++;
+  });
+
+  $("#loadMoreClients").click(function(){
+    if(client_length > ((client_pageIndex * pagelength))){
+      var itemsCount = ((client_pageIndex * pagelength) + pagelength);
+      $('.client_tr').slice(0, itemsCount).show();
+      client_pageIndex++;
+      if(client_length < (client_pageIndex * pagelength)){
+        $('#loadMoreClients').text("Minimize");
+      }
+    }
+    else{
+      $('.client_tr').slice(pagelength).hide();
+      client_pageIndex = 1;
+      $('#loadMoreClients').text("Load More ...");
+    }
+  });
+
+  $("#avgDay").click(function(){
+    if(!$(this).hasClass("avgPowButtonActive")){
+      $(this).addClass("avgPowButtonActive");
+      if($("#avgHour").hasClass("avgPowButtonActive")){
+        $("#avgHour").removeClass("avgPowButtonActive");
+        $("#avgHour").addClass("avgPowButton");
+      }
+      else if($("#avgMin").hasClass("avgPowButtonActive")){
+        $("#avgMin").removeClass("avgPowButtonActive");
+        $("#avgMin").addClass("avgPowButton");
+      }
+      avgPowChart.data.datasets[0].data = day_data;
+      avgPowChart.data.datasets[1].data = day_precache_table;
+      avgPowChart.data.datasets[2].data = day_ondemand_table;
+      avgPowChart.options.scales.xAxes = [{
+                    type:       "time",
+                    distribution: 'series',
+                    time:       {
+                        format: timeFormat,
+                        tooltipFormat: dayToolTip,
+                    },
+                    scaleLabel: {
+                        display:     true,
+                        labelString: 'Date'
+                    }
+                }];
+      avgPowChart.update();
+    }
+  });
+  $("#avgHour").click(function(){
+    if(!$(this).hasClass("avgPowButtonActive")){
+      $(this).addClass("avgPowButtonActive");
+      if($("#avgDay").hasClass("avgPowButtonActive")){
+        $("#avgDay").removeClass("avgPowButtonActive");
+        $("#avgDay").addClass("avgPowButton");
+      }
+      else if($("#avgMin").hasClass("avgPowButtonActive")){
+        $("#avgMin").removeClass("avgPowButtonActive");
+        $("#avgMin").addClass("avgPowButton");
+      }
+      avgPowChart.data.datasets[0].data = hour_data;
+      avgPowChart.data.datasets[1].data = hour_precache_table;
+      avgPowChart.data.datasets[2].data = hour_ondemand_table;
+      avgPowChart.options.scales.xAxes = [{
+                    type:       "time",
+                    distribution: 'series',
+                    time:       {
+                        format: timeFormat,
+                        tooltipFormat: hourToolTip,
+                    },
+                    scaleLabel: {
+                        display:     true,
+                        labelString: 'Date'
+                    }
+                }];
+      avgPowChart.update();
+    }
+  });
+  $("#avgMin").click(function(){
+    if(!$(this).hasClass("avgPowButtonActive")){
+      $(this).addClass("avgPowButtonActive");
+      if($("#avgDay").hasClass("avgPowButtonActive")){
+        $("#avgDay").removeClass("avgPowButtonActive");
+        $("#avgDay").addClass("avgPowButton");
+      }
+      else if($("#avgHour").hasClass("avgPowButtonActive")){
+        $("#avgHour").removeClass("avgPowButtonActive");
+        $("#avgHour").addClass("avgPowButton");
+      }
+      avgPowChart.data.datasets[0].data = minute_data;
+      avgPowChart.data.datasets[1].data = minute_precache_table;
+      avgPowChart.data.datasets[2].data = minute_ondemand_table;
+      avgPowChart.options.scales.xAxes = [{
+                    type:       "time",
+                    distribution: 'series',
+                    time:       {
+                        format: timeFormat,
+                        tooltipFormat: minuteToolTip,
+                    },
+                    scaleLabel: {
+                        display:     true,
+                        labelString: 'Date'
+                    }
+                }];
+      avgPowChart.update();
+    }
+  });
+
+});
+</script>
+
+<script>
+    window.scrollTo(0, 0);
+</script>
