@@ -261,15 +261,16 @@ def index():
                              "GROUP BY date_format( time_requested, '%Y-%m-%d %H:%i' ) "
                              "ORDER BY date_format( time_requested, '%Y-%m-%d %H:%i' ) ASC")
     avg_time_call = ("SELECT date_format( time_requested, '%Y-%m-%d %H' ), pow_type, "
-                     "avg(time_responded - time_requested) "
+                     "avg(timediff(time_responded, time_requested)) "
                      "FROM pow_requests "
                      "WHERE date_format(time_requested, '%Y-%m-%d %H') >= CURRENT_TIMESTAMP() - INTERVAL 24 HOUR "
                      " GROUP BY date_format( time_requested, '%Y-%m-%d %H' ), pow_type")
-    avg_combined_call = ("SELECT date_format( time_requested, '%Y-%m-%d %H' ), avg(time_responded - time_requested) "
+    avg_combined_call = ("SELECT date_format( time_requested, '%Y-%m-%d %H' ), "
+                         "avg(timediff(time_responded, time_requested)) "
                          "FROM pow_requests "
                          "WHERE date_format(time_requested, '%Y-%m-%d %H') >= CURRENT_TIMESTAMP() - INTERVAL 24 HOUR "
                          "GROUP BY date_format( time_requested, '%Y-%m-%d %H' )")
-    avg_overall_call = ("SELECT avg(time_responded - time_requested) FROM pow_requests "
+    avg_overall_call = ("SELECT avg(timediff(time_responded, time_requested)) FROM pow_requests "
                         "WHERE date_format(time_requested, '%Y-%m-%d %H') >= CURRENT_TIMESTAMP() - INTERVAL 24 HOUR")
     avg_difficulty_call = ("SELECT avg(pow_difficulty) FROM pow_requests "
                            "WHERE time_requested >= NOW() - INTERVAL 30 MINUTE")
