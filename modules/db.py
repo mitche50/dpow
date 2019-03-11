@@ -46,7 +46,6 @@ def set_db_data(db_call):
         db.commit()
         db_cursor.close()
         db.close()
-        logging.info("{}: record inserted into DB".format(datetime.now()))
     except MySQLdb.ProgrammingError as e:
         logging.info("{}: Exception entering data into database".format(datetime.now()))
         logging.info("{}: {}".format(datetime.now(), e))
@@ -63,18 +62,31 @@ def bulk_client_update(clients):
     delete_client_table = "DELETE FROM client_list"
     set_db_data(delete_client_table)
 
+    # Next, reset auto increment to 1
+    auto_call = "ALTER TABLE client_list AUTO_INCREMENT = 1"
+    set_db_data(auto_call)
+
     # Then, update the client table with all provided clients
-    create_row_call = "INSERT INTO client_list (client_id, client_address, client_type) VALUES "
+    create_row_call = ("INSERT INTO client_list (client_id, client_address, client_type, "
+                       "client_demand_count, client_precache_count) VALUES ")
     try:
         for index, client in enumerate(clients):
             if index == 0:
-                create_row_call = create_row_call + ("('{}', '{}', '{}')".format(client['client_id'],
-                                                                                 client['client_address'],
-                                                                                 client['client_type'].upper()))
+                create_row_call = create_row_call + ("('{}', '{}', '{}', {}, {})".format(client['client_id'],
+                                                                                         client['client_address'],
+                                                                                         client['client_type'].upper(),
+                                                                                         client['client_demand_count'],
+                                                                                         client['client_precache_count']
+                                                                                         )
+                                                     )
             else:
-                create_row_call = create_row_call + (" , ('{}', '{}', '{}')".format(client['client_id'],
-                                                                                    client['client_address'],
-                                                                                    client['client_type'].upper()))
+                create_row_call = create_row_call + (" , ('{}', '{}', '{}', {}, {})".format(client['client_id'],
+                                                                                            client['client_address'],
+                                                                                            client['client_type'].upper(),
+                                                                                            client['client_demand_count'],
+                                                                                            client['client_precache_count']
+                                                                                            )
+                                                     )
 
         set_db_data(create_row_call)
     except Exception as e:

@@ -12,7 +12,7 @@
     padding: 15px;
     background-color: black;
     color: white;
-    opacity: .8;
+    opacity: .9;
     margin-right: 5px;
     text-align: center;
     border-radius: 4px;
@@ -72,4 +72,14 @@
   background-color: #4691E3;
   color: white;
   opacity: .8;
+}
+
+div.footer-text {
+  text-align: center;
+  text-decoration: none;
+}
+
+.client-card {
+  max-width: 95%;
+  overflow-x: auto;
 }

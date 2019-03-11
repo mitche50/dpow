@@ -68,23 +68,24 @@
         </div>
         <div class="powtooltip">
             <i class="far fa-question-circle"></i>
-            <span class="powtooltiptext">Total number of work requests processed by the dPoW network.</span>
+            <span class="powtooltiptext">Total number of work requests processed by the dPoW network in the past 24 hours.</span>
         </div>
         <div><br></div>
           <div style="display:inline-block">
-            <h1 class="text-left">{{pow_count}}</h1>
+            <h1 class="text-left" id="pow_count">{{pow_count}}</h1>
           </div>
             <div style="display:inline-block; vertical-align:top">
                 {% if work_24hr < 0 %}
-                  <p style="color:#E24A4A; font-size:10px; display:inline;">{{work_24hr}}</p>
+                  <p style="color:#E24A4A; font-size:10px; display:inline;" id="pow_24hr">{{work_24hr}}</p>
                 {% elif work_24hr == 0 %}
-                  <p style="color:grey; font-size:10px; display:inline;">{{work_24hr}}</p>
+                  <p style="color:grey; font-size:10px; display:inline;" id="pow_24hr">{{work_24hr}}</p>
                 {% else %}
-                  <p style="color:#32CD32; font-size:10px; display:inline;">+{{work_24hr}}</p>
+                  <p style="color:#32CD32; font-size:10px; display:inline;" id="pow_24hr">+{{work_24hr}}</p>
                 {% endif %}
             </div>
           <div style="display:inline-block">
-            <p style="font-size: x-small; color:grey; text-align:right; padding-left: 20px">{{precache_ratio}}% precached</p>
+            <p style="font-size: x-small; color:grey; text-align:right; padding-left: 20px">{{precache_ratio}}% precached<br>
+                           {{new_account_ratio}}% new accounts</p>
           </div>
           </div>
         </div>
@@ -127,7 +128,7 @@
           <p class="card-text text-left">Average Requests</p>
           <div class="powtooltip">
             <i class="far fa-question-circle"></i>
-            <span class="powtooltiptext">Average number of work requests processed by the DPoW network.</span>
+            <span class="powtooltiptext">Average number of work requests processed by the DPoW network.  Timezone is UTC.</span>
           </div>
         </div>
           <div class="row">
@@ -151,7 +152,7 @@
           <p class="card-text text-left">Average Time</p>
           <div class="powtooltip">
             <i class="far fa-question-circle"></i>
-            <span class="powtooltiptext">Average Time it takes to process a work request on the DPoW network.</span>
+            <span class="powtooltiptext">Average Time it takes to process a work request on the DPoW network.  Timezone is UTC.</span>
           </div>
         </div>
         <h1 class="text-left">{{avg_overall}}s</h1>
@@ -225,7 +226,7 @@
             <div class="row-fluid">
                 <div class="card-deck mb-4 text-center">
                 <div class="card mb-4 shadow-sm">
-                  <div class="card-body">
+                  <div class="card-body client-card">
                     <div class="powtooltip" style="padding-bottom:20px;">
                       <i class="far fa-question-circle"></i>
                       <span class="powtooltiptext">A ranked list of payout addresses for clients providing work.  Clicking on the address will take you to Nano Crawler to see the payouts provided.</span>
@@ -237,10 +238,16 @@
                                 Rank
                             </th>
                             <th scope="col" style="text-align:center;">
-                                Payout Address
+                                Address
                             </th>
                             <th scope="col" style="text-align:center;">
-                                Total Work Provided
+                                Current Type
+                            </th>
+                            <th scope="col" style="text-align:center;">
+                                Precache Work
+                            </th>
+                            <th scope="col" style="text-align:center;">
+                                On Demand Work
                             </th>
                             </tr>
                         </thead>
@@ -248,12 +255,28 @@
                         {% for row in clients_table %}
                         <tr class="client_tr">
                             <td style="text-align: center;"><b>{{loop.index}}</b></td>
-                            <td style="text-align: center;"><a href="https://nanocrawler.cc/explorer/account/{{row[0]}}"><u>{{row[0][:7]}}...{{row[0][-7:]}}</u></a></td>
-                            {% if row[2] %}
-                            <td style="text-align: center;">{{row[2]}}</td>
+                            <td style="text-align: center;"><a href="https://nanocrawler.cc/explorer/account/{{row[0]}}"><u>{{row[0][:7]}}...{{row[0][-5:]}}</u></a></td>
+                            {% if row[4] == 'BOP' %}
+                            <td style="text-align: center;">Precache, On Demand, Both</td>
+                            {% elif row[4] == 'OP' %}
+                            <td style="text-align: center;">Precache, On Demand</td>
+                            {% elif row[4] == 'BP' %}
+                            <td style="text-align: center;">Precache, Both</td>
+                            {% elif row[4] == 'BO' %}
+                            <td style="text-align: center;">On Demand, Both</td>
+                            {% elif row[4] == 'P' %}
+                            <td style="text-align: center;">Precache</td>
+                            {% elif row[4] == 'O' %}
+                            <td style="text-align: center;">On Demand</td>
+                            {% else %}
+                            <td style="text-align: center;">Both</td>
+                            {% endif %}
+                            {% if row[1] %}
+                            <td style="text-align: center;">{{row[1]}}</td>
                             {% else %}
                             <td style="text-align: center;">0</td>
                             {% endif %}
+                            <td style="text-align: center;">{{row[2]}}</td>
                         </tr>
                         {% endfor %}
                         </tbody>
@@ -266,8 +289,11 @@
         </div>
     </div>
 </div>
+<div class="footer-text">
+    <small>Developed by Andrew Mitchell.  View my other projects at <a href="https://andrewgmitchell.com">andrewgmitchell.com</a><br>
+        Donations for future developments can be sent by <a href="https://nanote.net/pay/758b6c10-89fc-11e8-8cbe-b1db379191f2">clicking here!</a></small>
+</div>
 </body>
-
 <script>
 
 
@@ -334,15 +360,19 @@
         {% endif %}
         {% endfor %}];
 
-    var avg_precache_time = [{% for row in avg_response %}
-        {% if row[1] == 'P' %}
+    var avg_precache_time = [{% for row in avg_p_time %}
+        {% if row[1] %}
             {x: "{{row[0]}}", y: {{row[2]}}},
+        {% else %}
+            {x: "{{row[0]}}", y: 0},
         {% endif %}
         {% endfor %}];
 
-    var avg_ondemand_time = [{% for row in avg_response %}
-        {% if row[1] == 'O' %}
+    var avg_ondemand_time = [{% for row in avg_o_time %}
+        {% if row[1] %}
             {x: "{{row[0]}}", y: {{row[2]}}},
+        {% else %}
+            {x: "{{row[0]}}", y: 0},
         {% endif %}
         {% endfor %}];
 

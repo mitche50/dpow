@@ -4,6 +4,11 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta property="og:title" content="Distributed Proof of Work Dashboard">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dpow.nanocenter.org/">
+    <meta property="og:image" content="{{ url_for('static', filename='dpow_white_on_blue.png') }}">
+    <meta property="og:description" content="A dashboard showing the statistics for the Distributed Proof of Work Network.">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -16,6 +21,20 @@
     <title>Distributed Proof of Work Network Statistics</title>
 </head>
 <body style="background-color:#F4F5F9;">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color:white !important;">
-      <a class="navbar-brand" href="https://wiki.nanocenter.org/index.php?title=Distributed_Proof_of_Work_System"><img src="static/tnc_logo.png" style="width:200px"></a>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="https://nanocenter.org/"><img src="static/tnc_logo.png" style="width:200px"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarNavDropdown" class="navbar-collapse collapse ml-auto">
+           <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="https://wiki.nanocenter.org/index.php?title=Distributed_Proof_of_Work_System">Frequently Asked Questions</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://github.com/jamescoxon/nano_distributed_pow_client">Provide Work</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://discord.gg/qvz3qaV">Request Work</a></li>
+          </ul>
+        </div>
     </nav>
+
+    <div class="jumbotron" style="display:block;margin-left:auto;margin-right:auto;width:100%">
+      <img src="{{ url_for('static', filename='dpow_white_on_blue.png') }}" style="display:block;margin-left:auto;margin-right:auto;width:35%;height:auto;border-radius:20px">
+    </div>
